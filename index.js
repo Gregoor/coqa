@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const stream = require('stream');
 const { CLIEngine } = require('eslint');
 const filepaths = require('filepaths');
@@ -20,14 +21,15 @@ if (program.ignore) {
   ignore.push(program.ignore);
 }
 
-const paths = filepaths.getSync(program.args.length ? program.args : ['.'], {
+const paths = program.args.length ? program.args : ['.'];
+const allFilePaths = filepaths.getSync(paths, {
   ext: ['.js', '.jsx'],
   ignore
 });
 
 function runInspect() {
   return new Promise(resolve => {
-    const inspector = new Inspector(paths, require('./.jsinspectrc.json'));
+    const inspector = new Inspector(allFilePaths, require('./.jsinspectrc.json'));
 
     const matches = [];
     const writableStream = new stream.Writable({
@@ -45,19 +47,27 @@ function runInspect() {
 }
 
 function runLint() {
-  const cli = new CLIEngine({
-    parser: 'babel-eslint',
-    useEslintrc: false,
-    rules: require('./.eslintrc.json').rules
-  });
-  const report = cli.executeOnFiles(paths);
-  return report.results.filter(r => r.messages.length);
+  const cli = new CLIEngine(
+    Object.assign(
+      {
+        useEslintrc: false
+      },
+      require('./.eslintrc.json')
+    )
+  );
+  const report = cli.executeOnFiles(allFilePaths);
+  return report.results.filter(r => r.messages.length).map(r =>
+    Object.assign({}, r, {
+      filePath:
+        paths.length === 1 ? '.' + r.filePath.substr(path.resolve(paths[0]).length) : r.filePath
+    })
+  );
 }
 
 async function start() {
   const [duplicates, lintErrors] = await Promise.all([runInspect(), runLint()]);
   if (!duplicates.length && !lintErrors) {
-
+    return console.log('no problems found!');
   }
   require('babel-register');
   fs.writeFileSync(

@@ -1,9 +1,11 @@
 {
+  "parser": "babel-eslint",
+  "plugins": ["react"],
   "rules": {
-    "complexity": ["error", 8],
+    "complexity": ["error", 10],
     "max-depth": "error",
     "max-nested-callbacks": ["error", 3],
-    "max-params": ["error", 4],
+    "max-params": ["error", 5],
     "no-cond-assign": "error",
     "no-duplicate-case": "error",
     "no-empty": "error",
@@ -11,6 +13,8 @@
     "no-unexpected-multiline": "error",
     "no-throw-literal": "error",
     "no-unused-vars": "error",
-    "no-with": "error"
+    "no-with": "error",
+    "react/jsx-uses-vars": "warn",
+    "react/jsx-uses-react": "warn"
   }
 }

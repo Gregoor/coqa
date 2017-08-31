@@ -7,11 +7,12 @@
   },
   "dependencies": {
     "babel-eslint": "^7.2.3",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
     "commander": "^2.11.0",
     "eslint": "^4.5.0",
+    "eslint-plugin-react": "^7.3.0",
     "filepaths": "^0.3.0",
     "jsinspect": "^0.12.7",
     "react": "^15.6.1",
