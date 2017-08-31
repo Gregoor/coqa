@@ -15,7 +15,7 @@ const Summary = ({ style, ...props }) => (
 const LintReport = ({ lintErrors }) => (
   <div>
     <h2>Problematic code</h2>
-    {lintErrors.map(({ filePath, messages, errorCount, source }, i) => (
+    {lintErrors.map(({ filePath, messages, source }, i) => (
       <div key={i}>
         <div>{filePath}</div>
         {messages.map(({ message, line, endLine }, i) => (
@@ -40,7 +40,7 @@ const DuplicateReport = ({ duplicates }) => (
     <h2>Duplicate code</h2>
     {duplicates.map(({ instances }, i) => (
       <div key={i} open>
-        {instances.map(({ path, lines: [start, end], code }, i) => (
+        {instances.map(({ path, lines: [start], code }, i) => (
           <details key={i}>
             <Summary>{path}</Summary>
             <Code startingLineNumber={start}>{code}</Code>
@@ -55,7 +55,7 @@ const DuplicateReport = ({ duplicates }) => (
 module.exports = ({ duplicates, lintErrors }) => (
   <div>
     <h1>Code Review</h1>
-    {lintErrors.length && <LintReport {...{ lintErrors }} />}
-    {duplicates.length && <DuplicateReport {...{ duplicates }} />}
+    {!!lintErrors.length && <LintReport {...{ lintErrors }} />}
+    {!!duplicates.length && <DuplicateReport {...{ duplicates }} />}
   </div>
 );
