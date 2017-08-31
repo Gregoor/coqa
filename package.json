@@ -15,9 +15,11 @@
     "eslint-plugin-react": "^7.3.0",
     "filepaths": "^0.3.0",
     "jsinspect": "^0.12.7",
+    "opn": "^5.1.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-syntax-highlighter": "^5.7.0"
+    "react-syntax-highlighter": "^5.7.0",
+    "tmp": "^0.0.33"
   },
   "engines": {
     "node": ">=7.6.0"

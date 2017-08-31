@@ -15,15 +15,14 @@ npm install --global code-skeptic
 
 ## Usage
 ```bash
-  Usage: code-skeptic [options] <paths ...>
+  Usage: index [options] <paths ...>
 
 
   Options:
 
-    -V, --version       output the version number
-    --out <path>        path where to write the HTML report
-    --ignore <pattern>  ignore paths matching a regex
-    --debug             print debug information
-    -h, --help          output usage information
-
+    -V, --version           output the version number
+    -w, --wait <pattern>    seconds to wait for browser to open
+    -i, --ignore <pattern>  ignore paths matching a regex
+    -d, --debug             print debug information
+    -h, --help              output usage information
 ```

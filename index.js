@@ -5,15 +5,17 @@ const { CLIEngine } = require('eslint');
 const filepaths = require('filepaths');
 const program = require('commander');
 const { Inspector, reporters } = require('jsinspect');
+const opn = require('opn');
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
+const tmp = require('tmp');
 
 program
   .version(require('./package.json').version)
   .usage('[options] <paths ...>')
-  .option('--out <path>', 'path where to write the HTML report', './out')
-  .option('--ignore <pattern>', 'ignore paths matching a regex')
-  .option('--debug', 'print debug information')
+  .option('-w, --wait <pattern>', 'seconds to wait for browser to open', 3)
+  .option('-i, --ignore <pattern>', 'ignore paths matching a regex')
+  .option('-d, --debug', 'print debug information')
   .parse(process.argv);
 
 const ignore = ['node_modules', 'bower_components', 'test', 'spec'];
@@ -66,12 +68,13 @@ function runLint() {
 
 async function start() {
   const [duplicates, lintErrors] = await Promise.all([runInspect(), runLint()]);
-  if (!duplicates.length && !lintErrors) {
+  if (!duplicates.length && !lintErrors.length) {
     return console.log('no problems found!');
   }
   require('babel-register');
+  const tmpFile = tmp.fileSync({ postfix: '.html' });
   fs.writeFileSync(
-    program.out + '.html',
+    tmpFile.name,
     ReactDOMServer.renderToStaticMarkup(
       React.createElement(require('./Report'), {
         duplicates,
@@ -79,6 +82,8 @@ async function start() {
       })
     )
   );
+  await opn('file://' + tmpFile.name);
+  await new Promise(resolve => setTimeout(resolve, program.wait * 1000));
 }
 
 start().catch(error => {
