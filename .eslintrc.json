@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "complexity": ["error", 8],
+    "max-depth": "error",
+    "max-nested-callbacks": ["error", 3],
+    "max-params": ["error", 4],
+    "no-cond-assign": "error",
+    "no-duplicate-case": "error",
+    "no-empty": "error",
+    "no-irregular-whitespace": "error",
+    "no-unexpected-multiline": "error",
+    "no-throw-literal": "error",
+    "no-unused-vars": "error",
+    "no-with": "error"
+  }
+}
