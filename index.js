@@ -29,6 +29,10 @@ const allFilePaths = filepaths.getSync(paths, {
   ignore
 });
 
+if (program.debug) {
+  console.log('Checking:', '\n', allFilePaths.join('\n'));
+}
+
 function runInspect() {
   return new Promise(resolve => {
     const inspector = new Inspector(allFilePaths, require('./.jsinspectrc.json'));
