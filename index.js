@@ -62,12 +62,36 @@ function runLint() {
     )
   );
   const report = cli.executeOnFiles(allFilePaths);
-  return report.results.filter(r => r.messages.length).map(r =>
-    Object.assign({}, r, {
-      filePath:
-        paths.length === 1 ? '.' + r.filePath.substr(path.resolve(paths[0]).length) : r.filePath
-    })
-  );
+  const ruleResults = report.results
+    .filter(r => r.messages.length)
+    .map(result =>
+      Object.assign({}, result, {
+        filePath:
+          paths.length === 1
+            ? '.' + result.filePath.substr(path.resolve(paths[0]).length)
+            : result.filePath
+      })
+    )
+    .reduce((rulesResults, result) => {
+      for (const message of result.messages) {
+        const { ruleId } = message;
+        const ruleResults = rulesResults[ruleId] || (rulesResults[ruleId] = []);
+        let fileResults = ruleResults.find(r => (r.filePath = result.filePath));
+        if (!fileResults) {
+          fileResults = Object.assign({}, result, { messages: [] });
+          ruleResults.push(fileResults);
+        }
+        fileResults.messages.push(message);
+      }
+      return rulesResults;
+    }, {});
+  return Object.entries(ruleResults)
+    .map(([rule, paths]) => [
+      rule,
+      paths,
+      paths.reduce((sum, { messages }) => sum + messages.length, 0)
+    ])
+    .sort((r1, r2) => r1[2] < r2[2]);
 }
 
 async function start() {

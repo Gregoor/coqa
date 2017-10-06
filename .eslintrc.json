@@ -7,6 +7,7 @@
     "max-nested-callbacks": ["error", 3],
     "max-params": ["error", 5],
     "no-cond-assign": "error",
+    "no-const-assign": "error",
     "no-duplicate-case": "error",
     "no-empty": "error",
     "no-irregular-whitespace": "error",
@@ -14,6 +15,7 @@
     "no-throw-literal": "error",
     "no-unused-vars": "error",
     "no-with": "error",
+    "prefer-const": "error",
     "react/jsx-uses-vars": "warn",
     "react/jsx-uses-react": "warn"
   }
