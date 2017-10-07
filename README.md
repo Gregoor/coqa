@@ -15,7 +15,7 @@ npm install --global coqa
 
 ## Usage
 ```bash
-  Usage: index [options] <paths ...>
+  Usage: coqa [options] <paths ...>
 
 
   Options:

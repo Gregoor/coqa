@@ -101,7 +101,10 @@ async function start() {
   if (!duplicates.length && !lintErrors.length) {
     return console.log('no problems found!');
   }
-  require('babel-register');
+  require('babel-register')({
+    presets: ['stage-0'],
+    plugins: ['transform-react-jsx']
+  });
   const tmpFile = tmp.fileSync({ postfix: '.html' });
   fs.writeFileSync(
     tmpFile.name,
