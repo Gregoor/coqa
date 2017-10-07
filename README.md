@@ -1,16 +1,16 @@
-# Skeptic
+# Coqa (Code Quality Assurance)
 
-Automatically generates reports about problematic JavaScript code.
+Generates reports about duplicate/problematic JavaScript code.
 
 Defers all the hard work to [ESLint](https://eslint.org/) and [jsinspect](https://github.com/danielstjules/jsinspect).
 
-## Installation (not yet on NPM)
+## Installation
 ```bash
-yarn global add code-skeptic
+yarn global add coqa
 ```
 Or if you prefer NPM:
 ```bash
-npm install --global code-skeptic
+npm install --global coqa
 ```
 
 ## Usage
@@ -26,3 +26,9 @@ npm install --global code-skeptic
     -d, --debug             print debug information
     -h, --help              output usage information
 ```
+
+Code Duplication usually contains some false positives. I currently use my browsers
+DevTools to remove those, before submitting the review.
+
+A better version of this tool would let you select which to keep (and maybe also
+show a colored diff).

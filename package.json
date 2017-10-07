@@ -1,9 +1,9 @@
 {
-  "name": "code-skeptic",
+  "name": "coqa",
   "version": "0.1.0",
   "license": "MIT",
   "bin": {
-    "skeptic": "index.js"
+    "coqa": "index.js"
   },
   "dependencies": {
     "babel-eslint": "^7.2.3",
