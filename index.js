@@ -102,6 +102,7 @@ async function start() {
     return console.log('no problems found!');
   }
   require('babel-register')({
+    babelrc: false,
     presets: ['stage-0'],
     plugins: ['transform-react-jsx']
   });
