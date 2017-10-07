@@ -62,7 +62,7 @@ function runLint() {
     )
   );
   const report = cli.executeOnFiles(allFilePaths);
-  const ruleResults = report.results
+  return report.results
     .filter(r => r.messages.length)
     .map(result =>
       Object.assign({}, result, {
@@ -72,25 +72,25 @@ function runLint() {
             : result.filePath
       })
     )
-    .reduce((rulesResults, result) => {
+    .reduce((rulesPaths, result) => {
       for (const message of result.messages) {
         const { ruleId } = message;
-        const ruleResults = rulesResults[ruleId] || (rulesResults[ruleId] = []);
-        let fileResults = ruleResults.find(r => (r.filePath = result.filePath));
-        if (!fileResults) {
-          fileResults = Object.assign({}, result, { messages: [] });
-          ruleResults.push(fileResults);
+        let rulePaths = rulesPaths.find(([rule]) => rule === ruleId);
+        if (!rulePaths) {
+          rulePaths = [ruleId, [], 0];
+          rulesPaths.push(rulePaths);
         }
-        fileResults.messages.push(message);
+        rulePaths[2] += 1;
+
+        let pathMessages = rulePaths[1].find(({ filePath }) => filePath === result.filePath);
+        if (!pathMessages) {
+          pathMessages = Object.assign({}, result, { messages: [] });
+          rulePaths[1].push(pathMessages);
+        }
+        pathMessages.messages.push(message);
       }
-      return rulesResults;
-    }, {});
-  return Object.entries(ruleResults)
-    .map(([rule, paths]) => [
-      rule,
-      paths,
-      paths.reduce((sum, { messages }) => sum + messages.length, 0)
-    ])
+      return rulesPaths;
+    }, [])
     .sort((r1, r2) => r1[2] < r2[2]);
 }
 

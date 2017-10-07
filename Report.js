@@ -22,21 +22,23 @@ const LintReport = ({ lintErrors }) => (
             {rule} ({errorCount})
           </h3>
         </Summary>
-        {paths.map(({ filePath, messages, source }) => [
-          <div>{filePath}</div>,
-          messages.map(({ message, line, endLine }, i) => (
-            <details key={i}>
-              <Summary style={{ color: 'red' }}>{message}</Summary>
-              <Code startingLineNumber={line}>
-                {(source || '')
-                  .split('\n')
-                  .slice(line - 1, endLine)
-                  .join('\n')}
-              </Code>
-            </details>
-          )),
-          <hr />
-        ])}
+        {paths.map(({ filePath, messages, source }) => (
+          <div key={filePath}>
+            <div>{filePath}</div>
+            {messages.map(({ message, line, endLine }, i) => (
+              <details key={i}>
+                <Summary style={{ color: 'red' }}>{message}</Summary>
+                <Code startingLineNumber={line}>
+                  {(source || '')
+                    .split('\n')
+                    .slice(line - 1, endLine)
+                    .join('\n')}
+                </Code>
+              </details>
+            ))}
+            <hr />
+          </div>
+        ))}
       </details>
     ))}
   </div>
