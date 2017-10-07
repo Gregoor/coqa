@@ -1,19 +1,19 @@
-#!/usr/bin/env node
-
-const fs = require('fs');
-const path = require('path');
-const stream = require('stream');
-const { CLIEngine } = require('eslint');
-const filepaths = require('filepaths');
-const program = require('commander');
-const { Inspector, reporters } = require('jsinspect');
-const opn = require('opn');
-const React = require('react');
-const ReactDOMServer = require('react-dom/server');
-const tmp = require('tmp');
+import fs from 'fs';
+import path from 'path';
+import stream from 'stream';
+import { CLIEngine } from 'eslint';
+import filepaths from 'filepaths';
+import program from 'commander';
+import { Inspector, reporters } from 'jsinspect';
+import opn from 'opn';
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import tmp from 'tmp';
+import { version } from '../package.json';
+import Report from './Report';
 
 program
-  .version(require('./package.json').version)
+  .version(version.version)
   .usage('[options] <paths ...>')
   .option('-w, --wait <pattern>', 'seconds to wait for browser to open', 3)
   .option('-i, --ignore <pattern>', 'ignore paths matching a regex')
@@ -37,7 +37,7 @@ if (program.debug) {
 
 function runInspect() {
   return new Promise(resolve => {
-    const inspector = new Inspector(allFilePaths, require('./.jsinspectrc.json'));
+    const inspector = new Inspector(allFilePaths, require('../.jsinspectrc.json'));
 
     const matches = [];
     const writableStream = new stream.Writable({
@@ -55,25 +55,20 @@ function runInspect() {
 }
 
 function runLint() {
-  const cli = new CLIEngine(
-    Object.assign(
-      {
-        useEslintrc: false
-      },
-      require('./.eslintrc.json')
-    )
-  );
+  const cli = new CLIEngine({
+    useEslintrc: false,
+    ...require('../.eslintrc.json')
+  });
   const report = cli.executeOnFiles(allFilePaths);
   return report.results
     .filter(r => r.messages.length)
-    .map(result =>
-      Object.assign({}, result, {
-        filePath:
-          paths.length === 1
-            ? '.' + result.filePath.substr(path.resolve(paths[0]).length)
-            : result.filePath
-      })
-    )
+    .map(result => ({
+      ...result,
+      filePath:
+        paths.length === 1
+          ? '.' + result.filePath.substr(path.resolve(paths[0]).length)
+          : result.filePath
+    }))
     .reduce((rulesPaths, result) => {
       for (const message of result.messages) {
         const { ruleId } = message;
@@ -86,7 +81,7 @@ function runLint() {
 
         let pathMessages = rulePaths[1].find(({ filePath }) => filePath === result.filePath);
         if (!pathMessages) {
-          pathMessages = Object.assign({}, result, { messages: [] });
+          pathMessages = { ...result, messages: [] };
           rulePaths[1].push(pathMessages);
         }
         pathMessages.messages.push(message);
@@ -101,16 +96,11 @@ async function start() {
   if (!duplicates.length && !lintErrors.length) {
     return console.log('no problems found!');
   }
-  require('babel-register')({
-    babelrc: false,
-    presets: ['stage-0'],
-    plugins: ['transform-react-jsx']
-  });
   const tmpFile = tmp.fileSync({ postfix: '.html' });
   fs.writeFileSync(
     tmpFile.name,
     ReactDOMServer.renderToStaticMarkup(
-      React.createElement(require('./Report'), {
+      React.createElement(Report, {
         duplicates,
         lintErrors
       })

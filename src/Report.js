@@ -1,6 +1,6 @@
-const React = require('react');
-const SyntaxHighlighter = require('react-syntax-highlighter').default;
-const { docco } = require('react-syntax-highlighter/dist/styles');
+import React from 'react';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/styles';
 
 const Code = ({ children, ...props }) => (
   <SyntaxHighlighter {...props} showLineNumbers language="javascript" style={docco}>
@@ -61,7 +61,7 @@ const DuplicateReport = ({ duplicates }) => (
   </div>
 );
 
-module.exports = ({ duplicates, lintErrors }) => (
+export default ({ duplicates, lintErrors }) => (
   <div style={{ maxWidth: 900, margin: '0 auto' }}>
     <h1>Code Review</h1>
     {!!duplicates.length && <DuplicateReport {...{ duplicates }} />}
