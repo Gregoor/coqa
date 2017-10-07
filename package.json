@@ -1,6 +1,6 @@
 {
   "name": "coqa",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "MIT",
   "scripts": {
     "dev": "backpack",
@@ -8,7 +8,7 @@
     "prepublish": "npm run build"
   },
   "bin": {
-    "coqa": "./build/main.js"
+    "coqa": "node ./build/main.js"
   },
   "dependencies": {
     "babel-eslint": "^8.0.1",
