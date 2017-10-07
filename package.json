@@ -9,7 +9,7 @@
   },
   "preferGlobal": true,
   "bin": {
-    "coqa": "./build/main.js"
+    "coqa": "./build/main"
   },
   "dependencies": {
     "babel-eslint": "^8.0.1",
