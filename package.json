@@ -1,11 +1,11 @@
 {
   "name": "coqa",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "license": "MIT",
   "scripts": {
     "dev": "backpack",
     "build": "backpack build",
-    "prepublish": "npm run build && echo \"#!/usr/bin/env node\\n$(cat ./build/main.js)\" > ./build/main.js"
+    "prepublish": "npm run build && sed -i '1i#!/usr/bin/env node\\n' build/main.js"
   },
   "preferGlobal": true,
   "bin": "build/main.js",
