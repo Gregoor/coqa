@@ -1,6 +1,6 @@
 {
   "name": "coqa",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "license": "MIT",
   "scripts": {
     "dev": "backpack",
@@ -8,7 +8,7 @@
     "prepublish": "npm run build && echo \"#!/usr/bin/env node\\n$(cat ./build/main.js)\" > ./build/main.js"
   },
   "preferGlobal": true,
-  "bin": "build/main/.js",
+  "bin": "build/main.js",
   "dependencies": {
     "babel-eslint": "^8.0.1",
     "babel-plugin-transform-react-jsx": "^6.24.1",
